@@ -2,8 +2,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAppDispatch } from '@/config/hooks'
 import { createWorkspace } from '@/features/workspace/usecases/createWorkspace/createWorkspace.usecase'
-import { createWorkspaceSchema, type CreateWorkspaceFormValues } from '../validation/workspaceSchema'
-import { WorkspaceCommandFactory } from '../factories/WorkspaceCommandFactory'
+import { createWorkspaceSchema, type CreateWorkspaceFormValues } from '../../validation/workspaceSchema'
+import { WorkspaceCommandFactory } from '../../factories/WorkspaceCommandFactory'
 
 export const useCreateWorkspace = () => {
   const dispatch = useAppDispatch()

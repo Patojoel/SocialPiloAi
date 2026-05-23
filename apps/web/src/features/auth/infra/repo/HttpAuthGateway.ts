@@ -14,8 +14,8 @@ interface ApiUser {
 interface ApiLoginResponse {
   data: {
     user: ApiUser
-    access_token: string
-    refresh_token: string
+    accessToken: string
+    refreshToken: string
     expires_in: number
   }
 }
@@ -27,8 +27,8 @@ export class HttpAuthGateway implements AuthGateway {
     const res = await this.http.post<ApiLoginResponse>('/auth/login', payload)
     return {
       user: toCamelCase<User>(res.data.user),
-      accessToken: res.data.access_token,
-      refreshToken: res.data.refresh_token,
+      accessToken: res.data.accessToken,
+      refreshToken: res.data.refreshToken,
       expiresIn: res.data.expires_in,
     }
   }

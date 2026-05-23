@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useAppDispatch, useAppSelector } from '@/config/hooks'
 import { register } from '@/features/auth/usecases/register/register.usecase'
 import { selectAuthError, selectIsAuthPending } from '@/features/auth/slices/authSelectors'
-import { registerSchema, type RegisterFormValues } from '../validation/authSchema'
+import { RegisterFormValues, registerSchema } from '../../validation/authSchema'
 
 export const useRegister = () => {
   const dispatch = useAppDispatch()

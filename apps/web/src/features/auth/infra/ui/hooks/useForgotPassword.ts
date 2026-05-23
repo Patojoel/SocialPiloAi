@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useAppDispatch } from '@/config/hooks'
 import { forgotPassword } from '@/features/auth/usecases/forgotPassword/forgotPassword.usecase'
-import { forgotPasswordSchema, type ForgotPasswordFormValues } from '../validation/authSchema'
+import { ForgotPasswordFormValues, forgotPasswordSchema } from '../../validation/authSchema'
 
 export const useForgotPassword = () => {
   const dispatch = useAppDispatch()
