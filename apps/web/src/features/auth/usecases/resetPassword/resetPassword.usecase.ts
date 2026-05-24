@@ -7,6 +7,7 @@ export const resetPassword = createAppAsyncThunk<void, ResetPasswordCommand>(
   async (command, { extra, rejectWithValue }) => {
     try {
       await extra.authGateway.resetPassword(command.token, command.password)
+      return
     } catch (err) {
       if (err instanceof HttpError) return rejectWithValue({ message: err.message, status: err.status })
       if (err instanceof Error) return rejectWithValue({ message: err.message })

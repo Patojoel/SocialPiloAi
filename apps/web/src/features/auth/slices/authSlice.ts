@@ -7,8 +7,9 @@ import { logout } from '../usecases/logout/logout.usecase'
 import { fetchMe } from '../usecases/fetchMe/fetchMe.usecase'
 import { updateProfile } from '../usecases/updateProfile/updateProfile.usecase'
 
-interface AuthState {
+export interface AuthState {
   user: User | null
+  accessToken: string | null
   isAuthenticated: boolean
   loading: LoadingState
   error: string | null
@@ -16,6 +17,7 @@ interface AuthState {
 
 const initialState: AuthState = {
   user: null,
+  accessToken: null,
   isAuthenticated: false,
   loading: LoadingState.idle,
   error: null,
@@ -39,6 +41,7 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.loading = LoadingState.success
         state.user = action.payload.user
+        state.accessToken = action.payload.accessToken
         state.isAuthenticated = true
       })
       .addCase(login.rejected, (state, action) => {
@@ -54,6 +57,7 @@ const authSlice = createSlice({
       .addCase(register.fulfilled, (state, action) => {
         state.loading = LoadingState.success
         state.user = action.payload.user
+        state.accessToken = action.payload.accessToken
         state.isAuthenticated = true
       })
       .addCase(register.rejected, (state, action) => {
@@ -64,6 +68,7 @@ const authSlice = createSlice({
     builder
       .addCase(logout.fulfilled, (state) => {
         state.user = null
+        state.accessToken = null
         state.isAuthenticated = false
         state.loading = LoadingState.idle
         state.error = null
@@ -82,6 +87,7 @@ const authSlice = createSlice({
         state.loading = LoadingState.idle
         state.isAuthenticated = false
         state.user = null
+        state.accessToken = null
       })
     // UpdateProfile
     builder

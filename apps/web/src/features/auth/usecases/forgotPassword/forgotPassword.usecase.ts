@@ -7,6 +7,7 @@ export const forgotPassword = createAppAsyncThunk<void, ForgotPasswordCommand>(
   async (command, { extra, rejectWithValue }) => {
     try {
       await extra.authGateway.forgotPassword(command.email)
+      return
     } catch (err) {
       if (err instanceof HttpError) return rejectWithValue({ message: err.message, status: err.status })
       if (err instanceof Error) return rejectWithValue({ message: err.message })

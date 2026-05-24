@@ -9,7 +9,7 @@ import { switchWorkspace } from '../usecases/switchWorkspace/switchWorkspace.use
 
 const workspaceAdapter = createEntityAdapter<Workspace>()
 
-interface WorkspaceState {
+export interface WorkspaceState {
   loading: LoadingState
   error: string | null
   currentId: string | null
@@ -38,6 +38,10 @@ const workspaceSlice = createSlice({
       .addCase(listWorkspaces.fulfilled, (state, action) => {
         state.loading = LoadingState.success
         workspaceAdapter.setAll(state, action.payload)
+        // Auto-select first workspace if none is currently active
+        if (!state.currentId && action.payload.length > 0) {
+          state.currentId = action.payload[0]!.id
+        }
       })
       .addCase(listWorkspaces.rejected, (state, action) => {
         state.loading = LoadingState.failed

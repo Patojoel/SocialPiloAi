@@ -22,6 +22,7 @@ import { RefreshTokenUseCase } from '../../application/use-cases/refresh-token/r
 import { ForgotPasswordUseCase } from '../../application/use-cases/forgot-password/forgot-password.use-case'
 import { ResetPasswordUseCase } from '../../application/use-cases/reset-password/reset-password.use-case'
 import { UpdateProfileUseCase } from '../../application/use-cases/update-profile/update-profile.use-case'
+import { GetMeUseCase } from '../../application/use-cases/get-me/get-me.use-case'
 import { RegisterDto } from '../dtos/register.dto'
 import { LoginDto } from '../dtos/login.dto'
 import { ForgotPasswordDto } from '../dtos/forgot-password.dto'
@@ -39,6 +40,7 @@ export class AuthController {
     private readonly forgotPasswordUseCase: ForgotPasswordUseCase,
     private readonly resetPasswordUseCase: ResetPasswordUseCase,
     private readonly updateProfileUseCase: UpdateProfileUseCase,
+    private readonly getMeUseCase: GetMeUseCase,
   ) {}
 
   @Post('register')
@@ -100,7 +102,8 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   async me(@CurrentUser() user: JwtPayload) {
-    return user
+    const fullUser = await this.getMeUseCase.execute(user.sub)
+    return { data: fullUser }
   }
 
   @Patch('profile')

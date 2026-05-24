@@ -12,3 +12,20 @@ export const WorkspaceRoutes = {
 export const AppRoutes = {
   DASHBOARD: '/dashboard',
 } as const
+
+export const SocialAccountRoutes = {
+  LIST: '/social-accounts',
+  OAUTH_CALLBACK_FB: '/auth/facebook/callback',
+  OAUTH_CALLBACK_TT: '/auth/tiktok/callback',
+} as const
+
+export const MediaRoutes = {
+  LIST: '/media',
+} as const
+
+export const PostRoutes = {
+  LIST: '/posts',
+  CREATE: '/posts/new',
+  EDIT: '/posts/:id/edit',
+  DETAIL: '/posts/:id',
+} as const

@@ -11,6 +11,10 @@ export class FetchHttpProvider implements HttpProvider {
     this.workspaceId = id
   }
 
+  getWorkspaceId(): string | null {
+    return this.workspaceId
+  }
+
   private buildUrl(url: string, params?: Record<string, string | number | boolean>): string {
     const fullUrl = `${this.baseUrl}${url}`
     if (!params || Object.keys(params).length === 0) return fullUrl

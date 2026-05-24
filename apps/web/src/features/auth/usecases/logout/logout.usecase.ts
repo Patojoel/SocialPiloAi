@@ -8,6 +8,7 @@ export const logout = createAppAsyncThunk<void, void>(
       const token = getRefreshToken()
       if (token) await extra.authGateway.logout(token)
       clearSession()
+      return
     } catch (err) {
       clearSession()
       if (err instanceof Error) return rejectWithValue({ message: err.message })

@@ -34,14 +34,14 @@ export class HttpAuthGateway implements AuthGateway {
   }
 
   async register(payload: RegisterPayload) {
-    const res = await this.http.post<{ data: { user: ApiUser; access_token: string; refresh_token: string } }>(
+    const res = await this.http.post<{ data: { user: ApiUser; accessToken: string; refreshToken: string } }>(
       '/auth/register',
       payload,
     )
     return {
       user: toCamelCase<User>(res.data.user),
-      accessToken: res.data.access_token,
-      refreshToken: res.data.refresh_token,
+      accessToken: res.data.accessToken,
+      refreshToken: res.data.refreshToken,
     }
   }
 

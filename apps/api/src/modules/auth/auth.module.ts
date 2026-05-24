@@ -17,6 +17,7 @@ import { RefreshTokenUseCase } from './application/use-cases/refresh-token/refre
 import { ForgotPasswordUseCase } from './application/use-cases/forgot-password/forgot-password.use-case'
 import { ResetPasswordUseCase } from './application/use-cases/reset-password/reset-password.use-case'
 import { UpdateProfileUseCase } from './application/use-cases/update-profile/update-profile.use-case'
+import { GetMeUseCase } from './application/use-cases/get-me/get-me.use-case'
 import { AuthController } from './presentation/controllers/auth.controller'
 
 @Module({
@@ -44,6 +45,7 @@ import { AuthController } from './presentation/controllers/auth.controller'
     ForgotPasswordUseCase,
     ResetPasswordUseCase,
     UpdateProfileUseCase,
+    GetMeUseCase,
   ],
   controllers: [AuthController],
   exports: [JwtModule],

@@ -6,3 +6,4 @@ export const selectIsAuthenticated = (state: RootState) => state.auth.isAuthenti
 export const selectAuthLoading = (state: RootState) => state.auth.loading
 export const selectAuthError = (state: RootState) => state.auth.error
 export const selectIsAuthPending = (state: RootState) => state.auth.loading === LoadingState.pending
+export const selectAccessToken = (state: RootState) => state.auth.accessToken
