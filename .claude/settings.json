@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git checkout:*)",
+      "Bash(git add:*)",
+      "Bash(docker --version)",
+      "Bash(docker compose:*)",
+      "Bash(docker-compose --version)",
+      "Bash(docker exec:*)",
+      "Bash(git commit -m 'chore\\(docker\\): add docker-compose for PostgreSQL + Redis:*)",
+      "Bash(pnpm --filter api install)",
+      "Bash(pnpm migration:run)",
+      "Bash(git commit -m 'fix\\(api\\): add dotenv dep + use typeorm-ts-node-commonjs for migrations:*)",
+      "Bash(ls /Users/patojoel/SocialPiloAi/node_modules/.bin/typeorm*)",
+      "Bash(ls /Users/patojoel/SocialPiloAi/apps/api/node_modules/.bin/typeorm*)",
+      "Bash(ls /Users/patojoel/SocialPiloAi/node_modules/.pnpm/typeorm*/node_modules/typeorm/cli.js)",
+      "Bash(ls /Users/patojoel/SocialPiloAi/node_modules/.pnpm/typeorm*/node_modules/.bin/)",
+      "Bash(pnpm install:*)",
+      "Bash(pnpm dev:*)",
+      "Bash(curl -s http://localhost:3000/api/v1/auth/me)",
+      "Bash(curl -s -X POST http://localhost:3000/api/v1/auth/register -H 'Content-Type: application/json' -d '{\"email\":\"test@socialpilot.ai\",\"password\":\"password123\",\"firstName\":\"Joel\",\"lastName\":\"Test\"}')",
+      "Bash(python3 -m json.tool)",
+      "Bash(curl -s -X POST http://localhost:3000/api/v1/auth/login -H 'Content-Type: application/json' -d '{\"email\":\"test@socialpilot.ai\",\"password\":\"password123\"}')",
+      "mcp__magic__21st_magic_component_inspiration",
+      "mcp__magic__logo_search",
+      "mcp__magic__21st_magic_component_builder",
+      "Bash(pnpm --filter web add lucide-react @radix-ui/react-slot class-variance-authority @radix-ui/react-label)",
+      "Bash(pnpm --filter web typecheck)",
+      "Bash(npx tsc:*)",
+      "Bash(pnpm --filter web build)",
+      "Bash(npx vite:*)",
+      "Bash(pnpm db:seed)"
+    ]
+  }
+}
