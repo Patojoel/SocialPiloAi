@@ -1,9 +1,19 @@
+import { useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { SocialAccountCard } from '../components/SocialAccountCard'
 import { useSocialAccounts } from '../hooks/useSocialAccounts'
 import { LoadingState } from '@/shared/models/LoadingState'
 import { Loader2 } from 'lucide-react'
 
+const PLATFORM_LABELS: Record<string, string> = {
+  facebook: 'Facebook',
+  instagram: 'Instagram',
+  tiktok: 'TikTok',
+}
+
 const SocialAccountsPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams()
   const {
     loading,
     facebookAccounts,
@@ -12,6 +22,19 @@ const SocialAccountsPage = () => {
     handleConnect,
     handleDisconnect,
   } = useSocialAccounts()
+
+  useEffect(() => {
+    const connected = searchParams.get('connected')
+    const error = searchParams.get('error')
+    if (connected) {
+      toast.success(`${PLATFORM_LABELS[connected] ?? connected} connected successfully!`)
+      setSearchParams({}, { replace: true })
+    } else if (error) {
+      const msg = error === 'oauth_failed' ? 'OAuth authorization failed.' : 'Failed to connect account.'
+      toast.error(msg)
+      setSearchParams({}, { replace: true })
+    }
+  }, [searchParams, setSearchParams])
 
   return (
     <div className="space-y-8">

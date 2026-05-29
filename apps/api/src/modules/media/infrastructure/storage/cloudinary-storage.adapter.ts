@@ -14,7 +14,7 @@ export class CloudinaryStorageAdapter implements StoragePort {
   }
 
   async upload(file: Express.Multer.File, workspaceId: string): Promise<{ url: string; filename: string }> {
-    const folder = `socialpilot/${workspaceId}`
+    const folder = `SocialPiloAi/${workspaceId}`
     const resourceType = file.mimetype.startsWith('video/') ? 'video' : 'image'
 
     return new Promise((resolve, reject) => {

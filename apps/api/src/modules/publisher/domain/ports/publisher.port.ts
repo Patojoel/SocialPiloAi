@@ -7,7 +7,7 @@ export interface ExternalPostResult {
 }
 
 export interface PublisherPort {
-  publish(post: Post, accessToken: string): Promise<ExternalPostResult>
+  publish(post: Post, accessToken: string, mediaUrls: string[]): Promise<ExternalPostResult>
 }
 
 export const FACEBOOK_PUBLISHER = Symbol('FacebookPublisher')

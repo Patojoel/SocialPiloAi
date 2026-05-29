@@ -83,11 +83,16 @@ const authSlice = createSlice({
         state.user = action.payload
         state.isAuthenticated = true
       })
-      .addCase(fetchMe.rejected, (state) => {
+      .addCase(fetchMe.rejected, (state, action) => {
         state.loading = LoadingState.idle
-        state.isAuthenticated = false
-        state.user = null
-        state.accessToken = null
+        // Only invalidate session on 401 (invalid/expired token).
+        // Transient errors (500, network) should not log the user out.
+        const status = action.payload?.status
+        if (status === 401 || status === 403) {
+          state.isAuthenticated = false
+          state.user = null
+          state.accessToken = null
+        }
       })
     // UpdateProfile
     builder

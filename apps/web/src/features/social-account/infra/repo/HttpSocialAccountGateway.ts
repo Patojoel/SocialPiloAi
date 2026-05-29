@@ -1,6 +1,7 @@
 import type { SocialAccountGateway } from '../../gateway/SocialAccountGateway'
 import type { HttpProvider } from '@/shared/infra/http/HttpProvider'
 import type { SocialAccount, Platform } from '../../models/SocialAccount'
+import type { FacebookPage } from '../../models/FacebookPage'
 import { toCamelCase } from '@/shared/utils/caseTransform'
 
 interface ApiSocialAccount {
@@ -29,5 +30,10 @@ export class HttpSocialAccountGateway implements SocialAccountGateway {
   async getConnectUrl(platform: Platform): Promise<string> {
     const res = await this.http.get<{ data: { url: string } }>(`/social-accounts/connect/${platform}`)
     return res.data.url
+  }
+
+  async getFacebookPages(accountId: string): Promise<FacebookPage[]> {
+    const res = await this.http.get<{ data: FacebookPage[] }>(`/social-accounts/${accountId}/pages`)
+    return res.data
   }
 }

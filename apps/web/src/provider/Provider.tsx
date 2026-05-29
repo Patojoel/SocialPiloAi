@@ -16,10 +16,11 @@ setupAuthListeners()
 registerPostListeners()
 registerMediaListeners()
 
-// Sync workspaceId and access token from Redux → runtime singletons on every store change.
-// This handles both initial rehydration from redux-persist and runtime switches.
+// Read token directly from Redux store at request time — no sync lag after page reload.
+httpProvider.setTokenGetter(() => selectAccessToken(store.getState()) ?? null)
+
+// Sync workspaceId from Redux → httpProvider on every store change.
 let lastWorkspaceId: string | null = null
-let lastAccessToken: string | null = null
 store.subscribe(() => {
   const state = store.getState()
 
@@ -29,14 +30,12 @@ store.subscribe(() => {
     httpProvider.setWorkspaceId(id)
   }
 
+  // Keep tokenStorage in sync for any legacy code that reads from it directly.
   const token = selectAccessToken(state) ?? null
-  if (token !== lastAccessToken) {
-    lastAccessToken = token
-    if (token) {
-      setTokens({ accessToken: token, refreshToken: '' })
-    } else {
-      clearSession()
-    }
+  if (token) {
+    setTokens({ accessToken: token, refreshToken: '' })
+  } else {
+    clearSession()
   }
 })
 

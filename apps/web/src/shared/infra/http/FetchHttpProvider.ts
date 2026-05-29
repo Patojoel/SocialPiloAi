@@ -4,8 +4,13 @@ import { getAccessToken } from '@/features/auth/infra/tokenStorage'
 
 export class FetchHttpProvider implements HttpProvider {
   private workspaceId: string | null = null
+  private tokenGetter: () => string | null = getAccessToken
 
   constructor(private readonly baseUrl: string) {}
+
+  setTokenGetter(fn: () => string | null): void {
+    this.tokenGetter = fn
+  }
 
   setWorkspaceId(id: string | null): void {
     this.workspaceId = id
@@ -29,7 +34,7 @@ export class FetchHttpProvider implements HttpProvider {
       'Content-Type': 'application/json',
       ...extra,
     }
-    const token = getAccessToken()
+    const token = this.tokenGetter()
     if (token) headers['Authorization'] = `Bearer ${token}`
     if (this.workspaceId) headers['X-Workspace-Id'] = this.workspaceId
     return headers
