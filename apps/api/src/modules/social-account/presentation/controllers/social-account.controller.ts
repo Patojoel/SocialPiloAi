@@ -14,6 +14,7 @@ import { JwtAuthGuard } from '@/shared/guards/jwt-auth.guard'
 import { ListSocialAccountsUseCase } from '../../application/use-cases/list-social-accounts/list-social-accounts.use-case'
 import { DisconnectSocialAccountUseCase } from '../../application/use-cases/disconnect-social-account/disconnect-social-account.use-case'
 import { GetConnectUrlUseCase } from '../../application/use-cases/get-connect-url/get-connect-url.use-case'
+import { GetFacebookPagesUseCase } from '../../application/use-cases/get-facebook-pages/get-facebook-pages.use-case'
 import type { Platform } from '../../domain/entities/social-account.entity'
 
 const VALID_PLATFORMS: Platform[] = ['facebook', 'instagram', 'tiktok']
@@ -31,6 +32,7 @@ export class SocialAccountController {
     private readonly listSocialAccountsUseCase: ListSocialAccountsUseCase,
     private readonly disconnectSocialAccountUseCase: DisconnectSocialAccountUseCase,
     private readonly getConnectUrlUseCase: GetConnectUrlUseCase,
+    private readonly getFacebookPagesUseCase: GetFacebookPagesUseCase,
   ) {}
 
   @Get()
@@ -48,6 +50,16 @@ export class SocialAccountController {
   ) {
     if (!workspaceId) throw new BadRequestException('X-Workspace-Id header is required')
     await this.disconnectSocialAccountUseCase.execute(id, workspaceId)
+  }
+
+  @Get(':id/pages')
+  async getFacebookPages(
+    @Param('id') id: string,
+    @Headers('x-workspace-id') workspaceId: string,
+  ) {
+    if (!workspaceId) throw new BadRequestException('X-Workspace-Id header is required')
+    const pages = await this.getFacebookPagesUseCase.execute(id, workspaceId)
+    return { data: pages }
   }
 
   @Get('connect/:platform')

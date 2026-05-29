@@ -2,6 +2,7 @@ import { Injectable, Inject, NotFoundException } from '@nestjs/common'
 import { POST_REPOSITORY, type PostRepository } from '../../post/domain/repositories/post.repository'
 import { POST_RESULT_REPOSITORY, type PostResultRepository } from '../../post/domain/repositories/post-result.repository'
 import { SOCIAL_ACCOUNT_REPOSITORY, type SocialAccountRepository } from '../../social-account/domain/repositories/social-account.repository'
+import { MEDIA_REPOSITORY, type MediaRepository } from '../../media/domain/repositories/media.repository'
 import {
   FACEBOOK_PUBLISHER,
   INSTAGRAM_PUBLISHER,
@@ -20,6 +21,8 @@ export class PublishPostService {
     private readonly postResultRepo: PostResultRepository,
     @Inject(SOCIAL_ACCOUNT_REPOSITORY)
     private readonly socialAccountRepo: SocialAccountRepository,
+    @Inject(MEDIA_REPOSITORY)
+    private readonly mediaRepo: MediaRepository,
     @Inject(FACEBOOK_PUBLISHER)
     private readonly facebookPublisher: PublisherPort,
     @Inject(INSTAGRAM_PUBLISHER)
@@ -32,6 +35,13 @@ export class PublishPostService {
   async execute(postId: string): Promise<void> {
     const post = await this.postRepo.findById(postId)
     if (!post) throw new NotFoundException(`Post ${postId} not found`)
+
+    // Resolve media URLs from IDs
+    const mediaUrls: string[] = []
+    for (const mediaId of post.mediaIds) {
+      const media = await this.mediaRepo.findById(mediaId)
+      if (media) mediaUrls.push(media.url)
+    }
 
     const publisherMap: Record<Platform, PublisherPort> = {
       facebook: this.facebookPublisher,
@@ -75,7 +85,7 @@ export class PublishPostService {
 
       const publisher = publisherMap[platform]
       try {
-        const result = await publisher.publish(post, accessToken)
+        const result = await publisher.publish(post, accessToken, mediaUrls)
         await this.postResultRepo.save({
           postId,
           platform,

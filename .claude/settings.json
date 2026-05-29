@@ -29,7 +29,18 @@
       "Bash(npx tsc:*)",
       "Bash(pnpm --filter web build)",
       "Bash(npx vite:*)",
-      "Bash(pnpm db:seed)"
+      "Bash(pnpm db:seed)",
+      "Bash(pnpm --filter web add framer-motion)",
+      "Bash(pnpm --filter api add @nestjs/bull bull)",
+      "Bash(pnpm --filter api add -D @types/multer)",
+      "Bash(pnpm --filter api db:seed)",
+      "Bash(pnpm --filter api typecheck)",
+      "Bash(curl -s -X POST http://localhost:3000/api/v1/media/upload -H 'Authorization: Bearer test' -H 'X-Workspace-Id: test' -F file=@apps/api/package.json)",
+      "Bash(pnpm --filter api add cloudinary)",
+      "Bash(pnpm run:*)",
+      "Bash(pnpm --filter api build)",
+      "Bash(pnpm build:*)",
+      "Bash(git commit -m ':*)"
     ]
   }
 }

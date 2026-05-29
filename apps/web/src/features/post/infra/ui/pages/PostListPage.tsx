@@ -6,6 +6,7 @@ import { PostCard } from '../components/PostCard'
 import { PostFilters } from '../components/PostFilters'
 import { PostRoutes } from '../../routes/postRoutes'
 import { LoadingState } from '@/shared/models/LoadingState'
+import { ConnectedAccountsBar } from '@/features/social-account/infra/ui/components/ConnectedAccountsBar'
 
 const PostListPage = () => {
   const navigate = useNavigate()
@@ -50,6 +51,8 @@ const PostListPage = () => {
           </button>
         </div>
       </div>
+
+      <ConnectedAccountsBar />
 
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
         <PostFilters

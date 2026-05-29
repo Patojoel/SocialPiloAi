@@ -9,6 +9,7 @@ import { DisconnectSocialAccountUseCase } from './application/use-cases/disconne
 import { ConnectFacebookUseCase } from './application/use-cases/connect-facebook/connect-facebook.use-case'
 import { ConnectTiktokUseCase } from './application/use-cases/connect-tiktok/connect-tiktok.use-case'
 import { GetConnectUrlUseCase } from './application/use-cases/get-connect-url/get-connect-url.use-case'
+import { GetFacebookPagesUseCase } from './application/use-cases/get-facebook-pages/get-facebook-pages.use-case'
 import { SocialAccountController } from './presentation/controllers/social-account.controller'
 import { OAuthController } from './presentation/controllers/oauth.controller'
 
@@ -22,6 +23,7 @@ import { OAuthController } from './presentation/controllers/oauth.controller'
     ConnectFacebookUseCase,
     ConnectTiktokUseCase,
     GetConnectUrlUseCase,
+    GetFacebookPagesUseCase,
   ],
   controllers: [SocialAccountController, OAuthController],
   exports: [SOCIAL_ACCOUNT_REPOSITORY],
