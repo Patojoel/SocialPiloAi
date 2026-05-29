@@ -31,7 +31,14 @@ export class GetConnectUrlUseCase {
       case 'instagram': {
         const fbAppId = this.configService.get<string>('app.facebookAppId') ?? process.env['FACEBOOK_APP_ID'] ?? ''
         const redirectUri = `${apiUrl}/api/v1/auth/instagram/callback`
-        return `https://api.instagram.com/oauth/authorize?client_id=${fbAppId}&redirect_uri=${encodeURIComponent(redirectUri)}&state=${workspaceId}&scope=instagram_basic,instagram_content_publish&response_type=code`
+        const params = new URLSearchParams({
+          client_id: fbAppId,
+          redirect_uri: redirectUri,
+          state: workspaceId,
+          scope: 'public_profile,pages_show_list,pages_read_engagement,instagram_basic,instagram_content_publish',
+          response_type: 'code',
+        })
+        return `https://www.facebook.com/v18.0/dialog/oauth?${params.toString()}`
       }
       default: {
         const _exhaustive: never = platform

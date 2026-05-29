@@ -7,6 +7,7 @@ import { TokenCipherService } from './infrastructure/crypto/token-cipher.service
 import { ListSocialAccountsUseCase } from './application/use-cases/list-social-accounts/list-social-accounts.use-case'
 import { DisconnectSocialAccountUseCase } from './application/use-cases/disconnect-social-account/disconnect-social-account.use-case'
 import { ConnectFacebookUseCase } from './application/use-cases/connect-facebook/connect-facebook.use-case'
+import { ConnectInstagramUseCase } from './application/use-cases/connect-instagram/connect-instagram.use-case'
 import { ConnectTiktokUseCase } from './application/use-cases/connect-tiktok/connect-tiktok.use-case'
 import { GetConnectUrlUseCase } from './application/use-cases/get-connect-url/get-connect-url.use-case'
 import { GetFacebookPagesUseCase } from './application/use-cases/get-facebook-pages/get-facebook-pages.use-case'
@@ -21,6 +22,7 @@ import { OAuthController } from './presentation/controllers/oauth.controller'
     ListSocialAccountsUseCase,
     DisconnectSocialAccountUseCase,
     ConnectFacebookUseCase,
+    ConnectInstagramUseCase,
     ConnectTiktokUseCase,
     GetConnectUrlUseCase,
     GetFacebookPagesUseCase,

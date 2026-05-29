@@ -3,6 +3,7 @@ import { ApiTags } from '@nestjs/swagger'
 import { ConfigService } from '@nestjs/config'
 import type { Response } from 'express'
 import { ConnectFacebookUseCase } from '../../application/use-cases/connect-facebook/connect-facebook.use-case'
+import { ConnectInstagramUseCase } from '../../application/use-cases/connect-instagram/connect-instagram.use-case'
 import { ConnectTiktokUseCase } from '../../application/use-cases/connect-tiktok/connect-tiktok.use-case'
 
 @ApiTags('oauth')
@@ -10,6 +11,7 @@ import { ConnectTiktokUseCase } from '../../application/use-cases/connect-tiktok
 export class OAuthController {
   constructor(
     private readonly connectFacebookUseCase: ConnectFacebookUseCase,
+    private readonly connectInstagramUseCase: ConnectInstagramUseCase,
     private readonly connectTiktokUseCase: ConnectTiktokUseCase,
     private readonly configService: ConfigService,
   ) {}
@@ -31,6 +33,24 @@ export class OAuthController {
     try {
       await this.connectFacebookUseCase.execute({ code, workspaceId })
       return res.redirect(`${this.frontendUrl}/social-accounts?connected=facebook`)
+    } catch {
+      return res.redirect(`${this.frontendUrl}/social-accounts?error=connection_failed`)
+    }
+  }
+
+  @Get('instagram/callback')
+  async instagramCallback(
+    @Query('code') code: string | undefined,
+    @Query('error') error: string | undefined,
+    @Query('state') workspaceId: string | undefined,
+    @Res() res: Response,
+  ) {
+    if (error || !code || !workspaceId) {
+      return res.redirect(`${this.frontendUrl}/social-accounts?error=oauth_failed`)
+    }
+    try {
+      await this.connectInstagramUseCase.execute({ code, workspaceId })
+      return res.redirect(`${this.frontendUrl}/social-accounts?connected=instagram`)
     } catch {
       return res.redirect(`${this.frontendUrl}/social-accounts?error=connection_failed`)
     }
