@@ -3,6 +3,7 @@ import type { WorkspaceGateway } from '@/features/workspace/gateway/WorkspaceGat
 import type { SocialAccountGateway } from '@/features/social-account/gateway/SocialAccountGateway'
 import type { MediaGateway } from '@/features/media/gateway/MediaGateway'
 import type { PostGateway } from '@/features/post/gateway/PostGateway'
+import type { ProductGateway } from '@/features/product/gateway/ProductGateway'
 
 export interface Dependencies {
   authGateway: AuthGateway
@@ -10,4 +11,5 @@ export interface Dependencies {
   socialAccountGateway: SocialAccountGateway
   mediaGateway: MediaGateway
   postGateway: PostGateway
+  productGateway: ProductGateway
 }

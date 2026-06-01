@@ -8,6 +8,7 @@ import {
   FileText,
   Users,
   Image as ImageIcon,
+  Package,
   Settings,
   Menu,
   X,
@@ -158,6 +159,7 @@ function WorkspaceSwitcherPanel() {
 const DEFAULT_NAV_ITEMS: NavItem[] = [
   { label: 'Dashboard', to: '/dashboard', icon: <LayoutDashboard className="h-5 w-5" /> },
   { label: 'Posts', to: '/posts', icon: <FileText className="h-5 w-5" /> },
+  { label: 'Products', to: '/products', icon: <Package className="h-5 w-5" /> },
   { label: 'Social Accounts', to: '/social-accounts', icon: <Users className="h-5 w-5" /> },
   { label: 'Media Library', to: '/media', icon: <ImageIcon className="h-5 w-5" /> },
   { label: 'Settings', to: '/settings', icon: <Settings className="h-5 w-5" /> },

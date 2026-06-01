@@ -2,12 +2,13 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Suspense, lazy } from 'react'
 import { ProtectedRoute } from '@/shared/ui/components/ProtectedRoute'
 import { DashboardLayout } from '@/shared/ui/layouts/DashboardLayout'
-import { AuthRoutes, WorkspaceRoutes, SocialAccountRoutes, MediaRoutes, PostRoutes } from './routes'
+import { AuthRoutes, WorkspaceRoutes, SocialAccountRoutes, MediaRoutes, PostRoutes, ProductRoutes } from './routes'
 import { store } from '@/provider/Provider'
 import { listSocialAccounts } from '@/features/social-account/usecases/listSocialAccounts.usecase'
 import { listMedia } from '@/features/media/usecases/listMedia.usecase'
 import { listPosts } from '@/features/post/usecases/listPosts.usecase'
 import { getPostById } from '@/features/post/usecases/getPostById.usecase'
+import { listProducts } from '@/features/product/usecases/listProducts.usecase'
 
 const LoginPage = lazy(() => import('@/features/auth/infra/ui/pages/LoginPage'))
 const RegisterPage = lazy(() => import('@/features/auth/infra/ui/pages/RegisterPage'))
@@ -20,6 +21,7 @@ const MediaPage = lazy(() => import('@/features/media/infra/ui/pages/MediaPage')
 const PostListPage = lazy(() => import('@/features/post/infra/ui/pages/PostListPage'))
 const PostCreatePage = lazy(() => import('@/features/post/infra/ui/pages/PostCreatePage'))
 const PostDetailPage = lazy(() => import('@/features/post/infra/ui/pages/PostDetailPage'))
+const ProductListPage = lazy(() => import('@/features/product/infra/ui/pages/ProductListPage'))
 
 const DashboardPage = () => (
   <div>
@@ -62,6 +64,14 @@ const router = createBrowserRouter([
             element: <Suspense><MediaPage /></Suspense>,
             loader: async () => {
               void store.dispatch(listMedia({ page: 1, limit: 20 }))
+              return null
+            },
+          },
+          {
+            path: ProductRoutes.LIST,
+            element: <Suspense><ProductListPage /></Suspense>,
+            loader: async () => {
+              void store.dispatch(listProducts({ page: 1, limit: 20 }))
               return null
             },
           },

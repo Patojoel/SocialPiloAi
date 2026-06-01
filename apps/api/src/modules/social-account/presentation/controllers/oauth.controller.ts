@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Res } from '@nestjs/common'
+import { Controller, Get, Query, Res, Logger } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { ConfigService } from '@nestjs/config'
 import type { Response } from 'express'
@@ -9,6 +9,8 @@ import { ConnectTiktokUseCase } from '../../application/use-cases/connect-tiktok
 @ApiTags('oauth')
 @Controller('auth')
 export class OAuthController {
+  private readonly logger = new Logger(OAuthController.name)
+
   constructor(
     private readonly connectFacebookUseCase: ConnectFacebookUseCase,
     private readonly connectInstagramUseCase: ConnectInstagramUseCase,
@@ -63,13 +65,16 @@ export class OAuthController {
     @Query('state') workspaceId: string | undefined,
     @Res() res: Response,
   ) {
+    this.logger.log(`TikTok callback — code: ${code ? 'present' : 'missing'}, state: ${workspaceId}, error: ${error}`)
     if (error || !code || !workspaceId) {
+      this.logger.warn(`TikTok callback rejected — error: ${error}, code: ${code}, workspaceId: ${workspaceId}`)
       return res.redirect(`${this.frontendUrl}/social-accounts?error=oauth_failed`)
     }
     try {
       await this.connectTiktokUseCase.execute({ code, workspaceId })
       return res.redirect(`${this.frontendUrl}/social-accounts?connected=tiktok`)
-    } catch {
+    } catch (err) {
+      this.logger.error(`TikTok connect failed: ${err instanceof Error ? err.message : String(err)}`)
       return res.redirect(`${this.frontendUrl}/social-accounts?error=connection_failed`)
     }
   }

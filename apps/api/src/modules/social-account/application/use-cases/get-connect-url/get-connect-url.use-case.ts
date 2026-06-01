@@ -25,8 +25,16 @@ export class GetConnectUrlUseCase {
       }
       case 'tiktok': {
         const tiktokClientKey = this.configService.get<string>('app.tiktokClientKey') ?? process.env['TIKTOK_CLIENT_KEY'] ?? ''
-        const redirectUri = `${apiUrl}/api/v1/auth/tiktok/callback`
-        return `https://www.tiktok.com/auth/authorize/?client_key=${tiktokClientKey}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&state=${workspaceId}&scope=user.info.basic,video.upload`
+        // Use TIKTOK_REDIRECT_URI from env (supports ngrok URL for localhost dev)
+        const redirectUri = process.env['TIKTOK_REDIRECT_URI'] ?? `${apiUrl}/api/v1/auth/tiktok/callback`
+        const params = new URLSearchParams({
+          client_key: tiktokClientKey,
+          response_type: 'code',
+          redirect_uri: redirectUri,
+          state: workspaceId,
+          scope: 'user.info.basic,video.publish,video.upload',
+        })
+        return `https://www.tiktok.com/v2/auth/authorize/?${params.toString()}`
       }
       case 'instagram': {
         const fbAppId = this.configService.get<string>('app.facebookAppId') ?? process.env['FACEBOOK_APP_ID'] ?? ''

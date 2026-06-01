@@ -4,6 +4,7 @@ import { HttpWorkspaceGateway } from '@/features/workspace/infra/repo/HttpWorksp
 import { HttpSocialAccountGateway } from '@/features/social-account/infra/repo/HttpSocialAccountGateway'
 import { HttpMediaGateway } from '@/features/media/infra/repo/HttpMediaGateway'
 import { HttpPostGateway } from '@/features/post/infra/repo/HttpPostGateway'
+import { HttpProductGateway } from '@/features/product/infra/repo/HttpProductGateway'
 import type { Dependencies } from './dependencies'
 
 const API_URL = (import.meta.env['VITE_API_URL'] as string | undefined) ?? 'http://localhost:3000'
@@ -16,4 +17,5 @@ export const dependencies: Dependencies = {
   socialAccountGateway: new HttpSocialAccountGateway(httpProvider),
   mediaGateway: new HttpMediaGateway(httpProvider, `${API_URL}/api/v1`),
   postGateway: new HttpPostGateway(httpProvider),
+  productGateway: new HttpProductGateway(httpProvider),
 }

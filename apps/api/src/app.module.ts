@@ -13,6 +13,7 @@ import { WorkspaceModule } from './modules/workspace/workspace.module'
 import { SocialAccountModule } from './modules/social-account/social-account.module'
 import { MediaModule } from './modules/media/media.module'
 import { PostModule } from './modules/post/post.module'
+import { ProductModule } from './modules/product/product.module'
 import { PublisherModule } from './modules/publisher/publisher.module'
 import { SchedulerModule } from './modules/scheduler/scheduler.module'
 
@@ -54,6 +55,7 @@ import { SchedulerModule } from './modules/scheduler/scheduler.module'
     SocialAccountModule,
     MediaModule,
     PostModule,
+    ProductModule,
     PublisherModule,
     SchedulerModule,
   ],

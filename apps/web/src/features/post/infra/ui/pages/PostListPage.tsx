@@ -1,15 +1,18 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Plus, Loader2, ChevronLeft, ChevronRight, RefreshCw } from 'lucide-react'
+import { Plus, RefreshCw, ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '@/shared/utils/cn'
 import { usePostList } from '../hooks/usePostList'
-import { PostCard } from '../components/PostCard'
-import { PostFilters } from '../components/PostFilters'
+import { PostTable } from '../components/PostTable'
+import { PostFiltersBar } from '../components/PostFiltersBar'
 import { PostRoutes } from '../../routes/postRoutes'
 import { LoadingState } from '@/shared/models/LoadingState'
 import { ConnectedAccountsBar } from '@/features/social-account/infra/ui/components/ConnectedAccountsBar'
 
 const PostListPage = () => {
   const navigate = useNavigate()
+  const [searchQuery, setSearchQuery] = useState('')
+
   const {
     posts,
     loading,
@@ -20,29 +23,32 @@ const PostListPage = () => {
     handleStatusFilter,
     handlePlatformFilter,
     handleDelete,
-    handleDuplicate,
   } = usePostList()
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Posts</h1>
-          <p className="mt-1 text-gray-500">Manage and schedule your social media content.</p>
+          <h1 className="text-2xl font-bold text-gray-900">Posts</h1>
+          <p className="mt-0.5 text-sm text-gray-500">
+            {meta.total > 0 ? `${meta.total} post${meta.total > 1 ? 's' : ''}` : 'Manage your social media content'}
+          </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <button
             onClick={handleRefresh}
-            className="w-9 h-9 rounded-lg border border-gray-200 flex items-center justify-center hover:border-indigo-400 hover:text-indigo-600 transition-colors"
+            className="w-9 h-9 rounded-xl border border-gray-200 flex items-center justify-center text-gray-500 hover:border-indigo-400 hover:text-indigo-600 hover:bg-indigo-50 transition-all"
+            title="Refresh"
           >
             <RefreshCw className="w-4 h-4" />
           </button>
           <button
             onClick={() => navigate(PostRoutes.CREATE)}
             className={cn(
-              'flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white',
+              'flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-white',
               'bg-gradient-to-r from-indigo-600 to-violet-600',
-              'hover:from-indigo-700 hover:to-violet-700 shadow-lg shadow-indigo-500/30',
+              'hover:from-indigo-700 hover:to-violet-700 shadow-md shadow-indigo-500/25',
               'transition-all duration-200',
             )}
           >
@@ -52,84 +58,79 @@ const PostListPage = () => {
         </div>
       </div>
 
+      {/* Connected accounts */}
       <ConnectedAccountsBar />
 
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4">
-        <PostFilters
-          statusFilter={filters.status}
-          platformFilter={filters.platform}
-          onStatusChange={handleStatusFilter}
-          onPlatformChange={handlePlatformFilter}
-        />
-      </div>
+      {/* Filters */}
+      <PostFiltersBar
+        searchQuery={searchQuery}
+        statusFilter={filters.status}
+        platformFilter={filters.platform}
+        onSearchChange={setSearchQuery}
+        onStatusChange={handleStatusFilter}
+        onPlatformChange={handlePlatformFilter}
+      />
 
-      {loading === LoadingState.pending && (
-        <div className="flex items-center justify-center py-16">
-          <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
-        </div>
-      )}
+      {/* Table */}
+      <PostTable
+        posts={posts}
+        loading={loading === LoadingState.pending}
+        searchQuery={searchQuery}
+        onDelete={handleDelete}
+      />
 
-      {loading !== LoadingState.pending && posts.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-20 text-center">
-          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center mb-4">
-            <Plus className="w-8 h-8 text-indigo-400" />
+      {/* Pagination */}
+      {!loading && meta.totalPages > 1 && (
+        <div className="flex items-center justify-between px-1">
+          <p className="text-xs text-gray-400">
+            Page {meta.page} of {meta.totalPages} — {meta.total} posts
+          </p>
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={() => handlePageChange(meta.page - 1)}
+              disabled={meta.page <= 1}
+              className={cn(
+                'w-8 h-8 rounded-lg flex items-center justify-center border text-sm transition-all',
+                meta.page <= 1
+                  ? 'border-gray-100 text-gray-300 cursor-not-allowed bg-gray-50'
+                  : 'border-gray-200 text-gray-600 hover:border-indigo-500 hover:text-indigo-600 hover:bg-indigo-50',
+              )}
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+
+            {Array.from({ length: Math.min(meta.totalPages, 5) }).map((_, i) => {
+              const page = i + 1
+              return (
+                <button
+                  key={page}
+                  onClick={() => handlePageChange(page)}
+                  className={cn(
+                    'w-8 h-8 rounded-lg flex items-center justify-center border text-xs font-medium transition-all',
+                    page === meta.page
+                      ? 'border-indigo-600 bg-indigo-600 text-white shadow-sm'
+                      : 'border-gray-200 text-gray-600 hover:border-indigo-400 hover:text-indigo-600 hover:bg-indigo-50',
+                  )}
+                >
+                  {page}
+                </button>
+              )
+            })}
+
+            <button
+              onClick={() => handlePageChange(meta.page + 1)}
+              disabled={meta.page >= meta.totalPages}
+              className={cn(
+                'w-8 h-8 rounded-lg flex items-center justify-center border text-sm transition-all',
+                meta.page >= meta.totalPages
+                  ? 'border-gray-100 text-gray-300 cursor-not-allowed bg-gray-50'
+                  : 'border-gray-200 text-gray-600 hover:border-indigo-500 hover:text-indigo-600 hover:bg-indigo-50',
+              )}
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
           </div>
-          <p className="text-gray-600 font-medium">No posts yet</p>
-          <p className="text-gray-400 text-sm mt-1">Create your first post to get started</p>
-          <button
-            onClick={() => navigate(PostRoutes.CREATE)}
-            className="mt-4 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 transition-all duration-200 shadow-lg shadow-indigo-500/30"
-          >
-            Create Post
-          </button>
         </div>
-      )}
-
-      {loading !== LoadingState.pending && posts.length > 0 && (
-        <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {posts.map((post) => (
-              <PostCard
-                key={post.id}
-                post={post}
-                onDuplicate={handleDuplicate}
-                onDelete={handleDelete}
-              />
-            ))}
-          </div>
-
-          {meta.totalPages > 1 && (
-            <div className="flex items-center justify-center gap-3">
-              <button
-                onClick={() => handlePageChange(meta.page - 1)}
-                disabled={meta.page <= 1}
-                className={cn(
-                  'w-9 h-9 rounded-lg flex items-center justify-center border transition-colors',
-                  meta.page <= 1
-                    ? 'border-gray-200 text-gray-300 cursor-not-allowed'
-                    : 'border-gray-300 text-gray-700 hover:border-indigo-500 hover:text-indigo-600',
-                )}
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <span className="text-sm text-gray-600">
-                Page {meta.page} of {meta.totalPages}
-              </span>
-              <button
-                onClick={() => handlePageChange(meta.page + 1)}
-                disabled={meta.page >= meta.totalPages}
-                className={cn(
-                  'w-9 h-9 rounded-lg flex items-center justify-center border transition-colors',
-                  meta.page >= meta.totalPages
-                    ? 'border-gray-200 text-gray-300 cursor-not-allowed'
-                    : 'border-gray-300 text-gray-700 hover:border-indigo-500 hover:text-indigo-600',
-                )}
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-          )}
-        </>
       )}
     </div>
   )

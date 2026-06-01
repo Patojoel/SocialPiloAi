@@ -18,6 +18,7 @@ import { InstagramPublisherAdapter } from './infrastructure/adapters/instagram-p
 import { TiktokPublisherAdapter } from './infrastructure/adapters/tiktok-publisher.adapter'
 import { FACEBOOK_PUBLISHER, INSTAGRAM_PUBLISHER, TIKTOK_PUBLISHER } from './domain/ports/publisher.port'
 import { PublishPostService } from './application/publish-post.service'
+import { TiktokProxyController } from './presentation/tiktok-proxy.controller'
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { PublishPostService } from './application/publish-post.service'
     TokenCipherService,
     PublishPostService,
   ],
+  controllers: [TiktokProxyController],
   exports: [PublishPostService],
 })
 export class PublisherModule {}

@@ -29,3 +29,7 @@ export const PostRoutes = {
   EDIT: '/posts/:id/edit',
   DETAIL: '/posts/:id',
 } as const
+
+export const ProductRoutes = {
+  LIST: '/products',
+} as const

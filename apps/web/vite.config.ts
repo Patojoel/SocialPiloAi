@@ -11,6 +11,7 @@ export default defineConfig({
   },
   server: {
     port: 5173,
+    allowedHosts: ['existentially-monticulous-tiffany.ngrok-free.dev'],
     proxy: {
       '/api': {
         target: 'http://localhost:3000',
